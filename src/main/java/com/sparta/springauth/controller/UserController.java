@@ -1,7 +1,10 @@
 package com.sparta.springauth.controller;
 
+import com.sparta.springauth.dto.LoginRequestDto;
 import com.sparta.springauth.dto.SignupRequestDto;
 import com.sparta.springauth.service.UserService;
+import com.sun.security.auth.module.Krb5LoginModule;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,5 +43,18 @@ public class UserController {
     public String signup(SignupRequestDto requestDto){
         userService.signup(requestDto);
         return "redirect:/api/user/login-page";
+    }
+
+    //@ModelAttribute방식이지만 생략
+    @PostMapping("/user/login")
+    public String login(LoginRequestDto requestDto, HttpServletResponse res){
+        try {
+            userService.login(requestDto, res);
+        } catch (Exception e) {
+            //에러났으니까 뒤에 ?error
+            return "redirect:/api/user/login-page?error";
+        }
+        //성공하면 메인화면으로 리다이렉트
+        return "redirect:/";
     }
 }
