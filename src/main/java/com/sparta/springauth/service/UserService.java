@@ -63,29 +63,4 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void login(LoginRequestDto requestDto, HttpServletResponse res) {
-        String username=requestDto.getUsername();
-        String password=requestDto.getPassword();
-
-        //사용자 확인
-        //원래 findBy하고나면 Optional이 리턴되는데 그걸 User객체로 바로 받고싶은거임
-        // 그래서 orElseThorw해준다 = 값이 잘 나오면 그냥 User객체 주고,
-        //값이 없으면 안에 있는 에러익셉션을 발생시킴
-        User user= userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다")
-        );
-
-        //비밀번호 확인
-        //passwordEncoder.matches(평문, 암호화된 비밀번호)
-        //평문= 받아온비번, 암호화된비번 = 찾아온 user객체의 비번
-        //user객체에는 이미 암호화된 비번 저장되는거잖음
-        if(!passwordEncoder.matches(password, user.getPassword())){
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-
-        //인증 완료됨. JWT 생성 => 쿠키에 저장 => Response객체에 추가
-        String token = jwtUtil.createToken(user.getUsername(), user.getRole());
-        //http서블릿에서 받아온것도 넣어줌
-        jwtUtil.addJwtToCookie(token, res);
-    }
 }

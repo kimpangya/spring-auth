@@ -45,16 +45,4 @@ public class UserController {
         return "redirect:/api/user/login-page";
     }
 
-    //@ModelAttribute방식이지만 생략
-    @PostMapping("/user/login")
-    public String login(LoginRequestDto requestDto, HttpServletResponse res){
-        try {
-            userService.login(requestDto, res);
-        } catch (Exception e) {
-            //에러났으니까 뒤에 ?error
-            return "redirect:/api/user/login-page?error";
-        }
-        //성공하면 메인화면으로 리다이렉트
-        return "redirect:/";
-    }
 }
