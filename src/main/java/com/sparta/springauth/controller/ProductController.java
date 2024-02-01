@@ -1,15 +1,16 @@
 package com.sparta.springauth.controller;
 
+import com.sparta.springauth.dto.ProductRequestDto;
 import com.sparta.springauth.entity.User;
 import com.sparta.springauth.entity.UserRoleEnum;
 import com.sparta.springauth.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api")
@@ -32,5 +33,15 @@ public class ProductController {
         }
 
         return "redirect:/";
+    }
+
+
+
+    //TEST
+    @PostMapping("/validation")
+    @ResponseBody
+    //@Valid 검증하고 싶은 Dto앞에 달아놔서 알려줌 검증할거야~
+    public ProductRequestDto testValid(@RequestBody @Valid ProductRequestDto requestDto) {
+        return requestDto;
     }
 }
